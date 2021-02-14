@@ -15,6 +15,8 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
+  toggleSpinner();
+
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -29,7 +31,9 @@ const showImages = (images) => {
 }
 
 const getImages = (query) => {
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
+  const url = `https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`
+  toggleSpinner();
+  fetch(url)
     .then(response => response.json())
     .then(data => showImages(data.hits))
     .catch(err => console.log(err))
@@ -44,7 +48,7 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    element.classList.remove('added');
   }
 }
 var timer
@@ -83,7 +87,7 @@ const createSlider = () => {
     changeSlide(slideIndex);
   }, duration);
   }else{
-    alert('Slider change duration cannot be Minus(-) or Zero(0). Otherwise it will not play')
+    alert('Slider change duration cannot be Minus(-) or Zero(0). Otherwise it will not play!')
   }
 }
 
@@ -113,6 +117,14 @@ const changeSlide = (index) => {
   items[index].style.display = "block"
 }
 
+
+document.getElementById("search")
+  .addEventListener("keypress", function (event){
+      if(event.key === 'Enter'){
+        document.getElementById("search-btn").click();
+  }
+});
+
 searchBtn.addEventListener('click', function () {
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
@@ -124,3 +136,8 @@ searchBtn.addEventListener('click', function () {
 sliderBtn.addEventListener('click', function () {
   createSlider();
 })
+
+const toggleSpinner = () => {
+  const spinner = document.getElementById('loading-spinner');
+  spinner.classList.toggle('d-none');
+}
