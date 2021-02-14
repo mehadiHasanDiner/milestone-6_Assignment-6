@@ -75,12 +75,16 @@ const createSlider = () => {
     src="${slide}"
     alt="">`;
     sliderContainer.appendChild(item)
-  })
+  });
   changeSlide(0)
+  if(duration>0){
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
   }, duration);
+  }else{
+    alert('Slider change duration cannot be Minus(-) or Zero(0). Otherwise it will not play')
+  }
 }
 
 // change slider index 
