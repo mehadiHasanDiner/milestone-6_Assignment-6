@@ -36,19 +36,19 @@ const getImages = (query) => {
   fetch(url)
     .then(response => response.json())
     .then(data => showImages(data.hits))
-    .catch(err => console.log(err))
+    .catch(error => displayError('Something Went Wrong!! Please try again later!'))
 }
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.add('added');
+  element.classList.toggle('added');
  
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    sliders.pop(img);
   }
 }
 
@@ -73,6 +73,7 @@ const createSlider = () => {
   // hide image aria
   imagesArea.style.display = 'none';
   const duration = document.getElementById('duration').value;
+  if(duration>0){
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -82,13 +83,12 @@ const createSlider = () => {
     sliderContainer.appendChild(item)
   });
   changeSlide(0)
-  if(duration>0){
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
   }, duration);
   }else{
-    alert('Slider change duration cannot be Minus(-) or Zero(0). Otherwise it will not play!')
+    alert('Time duration cannot be Negative or empty. Otherwise it will not play!')
   }
 }
 
@@ -132,13 +132,26 @@ searchBtn.addEventListener('click', function () {
   const search = document.getElementById('search');
   getImages(search.value)
   sliders.length = 0;
+
+  // bonus-search button edit  
+ document.getElementById('search').value="";
 })
 
 sliderBtn.addEventListener('click', function () {
   createSlider();
 })
 
+// Toggle spinner handler
 const toggleSpinner = () => {
   const spinner = document.getElementById('loading-spinner');
+  const imagesArea = document.querySelector('.images');
   spinner.classList.toggle('d-none');
+  imagesArea.classList.toggle('d-none');
 }
+
+// Error handler
+const displayError = error => {
+  const errorTag = document.getElementById('error-message');
+  errorTag.innerText = error;
+}
+
