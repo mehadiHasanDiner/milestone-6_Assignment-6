@@ -48,9 +48,10 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
   } else {
-    element.classList.remove('added');
+    alert('Hey, Already added !')
   }
 }
+
 var timer
 const createSlider = () => {
   // check slider image length
